@@ -3,63 +3,65 @@ with base as (
   from {{ ref('stg_dbt__invocations') }}
 ),
 
-model_executions as (
-  select *
+model_executions_statuses as (
+  select
+      command_invocation_id,
+      status
   from {{ ref('stg_dbt__model_executions') }}
 ),
 
-seed_executions as (
-    select *
+seed_executions_statuses as (
+    select
+      command_invocation_id,
+      status
     from {{ ref('stg_dbt__seed_executions') }}
 ),
 
-snapshot_executions as (
-    select *
+snapshot_executions_statuses as (
+    select
+      command_invocation_id,
+      status
     from {{ ref('stg_dbt__snapshot_executions') }}
 ),
 
-test_executions as (
-    select *
+test_executions_statuses as (
+    select
+      command_invocation_id,
+      status
     from {{ ref('stg_dbt__test_executions') }}
 ),
 
-model_status_flagging as (
+all_executions_statuses as (
+
+  SELECT * FROM model_executions_statuses
+  UNION ALL
+  SELECT * FROM seed_executions_statuses
+  UNION ALL
+  SELECT * FROM snapshot_executions_statuses
+  UNION ALL
+  SELECT * FROM test_executions_statuses
+
+),
+
+invocation_error_counting as (
 
 	select
         command_invocation_id,
-        sum(case when status != 'success' then 1 else 0 end) as model_success_flag
-	from model_executions
+        sum(case when status NOT IN ('success', 'pass') then 1 else 0 end) as error_count
+	from all_executions_statuses
 	group by command_invocation_id
 
 ),
 
-seed_status_flagging as (
+invocation_error_labeling as (
 
 	select
-        command_invocation_id,
-        sum(case when status != 'success' then 1 else 0 end) as seed_success_flag
-	from seed_executions
-	group by command_invocation_id
-
-),
-
-snapshot_status_flagging as (
-
-	select
-        command_invocation_id,
-        sum(case when status != 'success' then 1 else 0 end) as snapshot_success_flag
-	from snapshot_executions
-	group by command_invocation_id
-
-),
-
-test_status_flagging as (
-
-	select
-        command_invocation_id,
-        sum(case when status != 'success' then 1 else 0 end) as test_success_flag
-	from test_executions
-	group by command_invocation_id
+	    command_invocation_id,
+	    case
+          when error_count is null then null
+          when error_count != 0 then 'error' else 'success'
+        end as invocation_status
+    from invocation_error_counting
 
 ),
 
@@ -71,6 +73,8 @@ final as (
         base.project_name,
         base.run_started_at,
         base.dbt_command,
+        GET(base.invocation_args, 'select') as selection_criteria,
+        invocation_error_labeling.invocation_status,
         base.full_refresh_flag,
         base.target_profile_name,
         base.target_name,
@@ -84,37 +88,10 @@ final as (
         base.env_vars,
         base.dbt_vars,
         base.invocation_args,
-        base.dbt_custom_envs,
-
-        case
-          when model_status_flagging.model_success_flag is null then null
-          when model_status_flagging.model_success_flag != 0 then 'error' else 'success'
-        end as invocation_models_status,
-
-        case
-          when seed_status_flagging.seed_success_flag is null then null
-          when seed_status_flagging.seed_success_flag != 0 then 'error' else 'success'
-        end as invocation_seeds_status,
-
-        case
-          when snapshot_status_flagging.snapshot_success_flag is null then null
-          when snapshot_status_flagging.snapshot_success_flag != 0 then 'error' else 'success'
-        end as invocation_snapshots_status,
-
-        case
-          when test_status_flagging.test_success_flag is null then null
-          when test_status_flagging.test_success_flag != 0 then 'error' else 'success'
-        end as invocation_tests_status
-
+        base.dbt_custom_envs
     from base
-    left join model_status_flagging
-      on base.command_invocation_id = model_status_flagging.command_invocation_id
-    left join seed_status_flagging
-      on base.command_invocation_id = seed_status_flagging.command_invocation_id
-    left join snapshot_status_flagging
-      on base.command_invocation_id = snapshot_status_flagging.command_invocation_id
-    left join test_status_flagging
-      on base.command_invocation_id = test_status_flagging.command_invocation_id
+    left join invocation_error_labeling
+      on base.command_invocation_id = invocation_error_labeling.command_invocation_id
 )
 
 select * from final

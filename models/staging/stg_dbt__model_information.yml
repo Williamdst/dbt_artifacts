@@ -1,0 +1,36 @@
+version: 2
+
+models:
+- name: stg_dbt__model_information
+  description: Staging model that contains data about models executions from the information schemas.
+  columns:
+  - name: command_invocation_id
+    description: '{{ doc("command_invocation_id") }}'
+  - name: table_catalog
+    description: '{{ doc("table_catalog") }}'
+  - name: table_schema
+    description: '{{ doc("table_schema") }}'
+  - name: table_name
+    description: '{{ doc("table_name") }}'
+  - name: table_owner
+    description: '{{ doc("table_owner") }}'
+  - name: table_type
+    description: '{{ doc("table_type") }}'
+  - name: is_transient
+    description: '{{ doc("is_transient") }}'
+  - name: clustering_key
+    description: '{{ doc("clustering_key") }}'
+  - name: row_count
+    description: '{{ doc("row_count") }}'
+  - name: bytes
+    description: '{{ doc("bytes") }}'
+  - name: retention_time
+    description: '{{ doc("retention_time") }}'
+  - name: created
+    description: '{{ doc("created") }}'
+  - name: last_altered
+    description: '{{ doc("last_altered") }}'
+  - name: auto_clustering_on
+    description: '{{ doc("auto_clustering_on") }}'
+  - name: comment
+    description: '{{ doc("comment") }}'

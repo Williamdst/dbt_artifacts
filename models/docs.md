@@ -377,9 +377,21 @@ The meta field of the config associated with the node.
 
 {% enddocs %}
 
+{% docs selection_criteria %}
+
+The "select" key from the Key-value pairs of args passed to invocation.
+
+{% enddocs %}
+
 {% docs invocation_args %}
 
 Key-value pairs of args passed to invocation.
+
+{% enddocs %}
+
+{% docs invocation_status %}
+
+Status of the invocation in its entirety (where all things successful)
 
 {% enddocs %}
 
@@ -394,3 +406,88 @@ Key-value pairs of environment variables passed to invocation that have the pref
 Alias of the node.
 
 {% enddocs %}
+
+{% docs table_owner %}
+
+Name of the role that owns the table.
+
+{% enddocs %}
+
+{% docs table_type %}
+
+Whether the table is a base table, temporary table, or view.
+
+{% enddocs %}
+
+{% docs is_transient %}
+
+Whether this is a transient table.
+
+{% enddocs %}
+
+{% docs clustering_key %}
+
+Clustering key for the table.
+
+{% enddocs %}
+
+{% docs row_count %}
+
+Number of rows in the table.
+
+{% enddocs %}
+
+{% docs bytes %}
+
+Number of bytes accessed by a scan of the table.
+
+{% enddocs %}
+
+{% docs retention_time %}
+
+Number of days that historical data is retained for Time Travel.
+
+{% enddocs %}
+
+{% docs created %}
+
+Creation time of the table.
+
+{% enddocs %}
+
+{% docs last_altered %}
+
+Date and time when the table was last altered by a DDL or DML operation.
+
+{% enddocs %}
+
+{% docs auto_clustering_on %}
+
+Whether automatic clustering is enabled for the table.
+
+{% enddocs %}
+
+{% docs comment %}
+
+Comment for this table.
+
+{% enddocs %}
+
+{% docs table_catalog %}
+
+Database that the table belongs to.
+
+{% enddocs %}
+
+{% docs table_schema %}
+
+Schema that the table belongs to.
+
+{% enddocs %}
+
+{% docs table_name %}
+
+Name of the table.
+
+{% enddocs %}
+

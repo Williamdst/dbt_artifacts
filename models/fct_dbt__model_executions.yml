@@ -22,6 +22,8 @@ models:
     description: '{{ doc("rows_affected") }}'
   - name: bytes_affected
     description: '{{ doc("bytes_processed") }}'
+  - name: database
+    description: '{{ doc("database") }}'
   - name: schema
     description: '{{ doc("schema") }}'
   - name: status
@@ -34,3 +36,25 @@ models:
     description: '{{ doc("was_full_refresh") }}'
   - name: alias
     description: '{{ doc("alias") }}'
+  - name: table_owner
+    description: '{{ doc("table_owner") }}'
+  - name: table_type
+    description: '{{ doc("table_type") }}'
+  - name: is_transient
+    description: '{{ doc("is_transient") }}'
+  - name: clustering_key
+    description: '{{ doc("clustering_key") }}'
+  - name: row_count
+    description: '{{ doc("row_count") }}'
+  - name: bytes
+    description: '{{ doc("bytes") }}'
+  - name: retention_time
+    description: '{{ doc("retention_time") }}'
+  - name: created
+    description: '{{ doc("created") }}'
+  - name: last_altered
+    description: '{{ doc("last_altered") }}'
+  - name: auto_clustering_on
+    description: '{{ doc("auto_clustering_on") }}'
+  - name: comment
+    description: '{{ doc("comment") }}'

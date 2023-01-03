@@ -63,6 +63,19 @@
                 )
             }}
 
+            {% do log("Uploading model information", true) %}
+            {% set model_information = dbt_artifacts.get_relation('model_information') %}
+            {% set content_model_information_array = dbt_artifacts.upload_model_information(results) %}
+            {% for content_query in content_model_information_array %}
+                {{ dbt_artifacts.insert_into_metadata_table(
+                    database_name=model_information.database,
+                    schema_name=model_information.schema,
+                    table_name=model_information.identifier,
+                    content=content_query
+                    )
+                }}
+            {% endfor %}
+
         {% endif %}
 
         {% do log("Uploading exposures", true) %}

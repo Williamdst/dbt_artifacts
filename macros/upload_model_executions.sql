@@ -25,7 +25,8 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }},
-            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }}
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }}
         from values
         {% for model in models -%}
             (
@@ -66,6 +67,7 @@
                 {{ model.execution_time }}, {# total_node_runtime #}
                 null, -- rows_affected not available {# Only available in Snowflake & BigQuery #}
                 '{{ model.node.config.materialized }}', {# materialization #}
+                '{{ model.node.database }}', {# database #}
                 '{{ model.node.schema }}', {# schema #}
                 '{{ model.node.name }}', {# name #}
                 '{{ model.node.alias }}' {# alias #}
@@ -122,6 +124,7 @@
             safe_cast('{{ model.adapter_response.rows_affected }}' as int64),
             safe_cast('{{ model.adapter_response.bytes_processed }}' as int64),
             '{{ model.node.config.materialized }}', {# materialization #}
+            '{{ model.node.database }}', {# database #}
             '{{ model.node.schema }}', {# schema #}
             '{{ model.node.name }}', {# name #}
             '{{ model.node.alias }}' {# alias #}
@@ -152,7 +155,8 @@
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(11) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(12) }},
             {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(13) }},
-            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }}
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(14) }},
+            {{ adapter.dispatch('column_identifier', 'dbt_artifacts')(15) }}
         from values
         {% for model in models -%}
             (
@@ -193,6 +197,7 @@
                 {{ model.execution_time }}, {# total_node_runtime #}
                 try_cast('{{ model.adapter_response.rows_affected }}' as int), {# rows_affected #}
                 '{{ model.node.config.materialized }}', {# materialization #}
+                '{{ model.node.database }}', {# database #}
                 '{{ model.node.schema }}', {# schema #}
                 '{{ model.node.name }}', {# name #}
                 '{{ model.node.alias }}' {# alias #}

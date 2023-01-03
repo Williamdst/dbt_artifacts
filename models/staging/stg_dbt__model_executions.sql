@@ -23,6 +23,7 @@ enhanced as (
             bytes_processed,
         {% endif %}
         materialization,
+        database,
         schema, -- noqa
         name,
         alias

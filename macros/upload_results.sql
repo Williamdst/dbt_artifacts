@@ -1,3 +1,7 @@
+-- TODO: CAN I GET THE MODEL_INFORMATION TO POST_HOOK AFTER EACH MODEL
+-- TODO: CAN I GET GRAB MODELS IN BULK FROM THE INFORMATION SCHEMA
+-- I CAN PROBABLY GET IT DOWN TO -> FROM DATABASE WHERE SCHEMA='' AND (TABLE='' OR TABLE='' OR TABLE='')
+-- TODO: TEST THE PARAMETER THAT CAN EXCLUDE THE MODEL_INFORMATION MODEL
 {# dbt doesn't like us ref'ing in an operation so we fetch the info from the graph #}
 {% macro get_relation(get_relation_name) %}
     {% if execute %}
@@ -14,7 +18,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro upload_results(results) -%}
+{% macro upload_results(results, include_information=true) -%}
 
     {% if execute %}
 
@@ -63,18 +67,20 @@
                 )
             }}
 
-            {% do log("Uploading model information", true) %}
-            {% set model_information = dbt_artifacts.get_relation('model_information') %}
-            {% set content_model_information_array = dbt_artifacts.upload_model_information(results) %}
-            {% for content_query in content_model_information_array %}
-                {{ dbt_artifacts.insert_into_metadata_table(
-                    database_name=model_information.database,
-                    schema_name=model_information.schema,
-                    table_name=model_information.identifier,
-                    content=content_query
-                    )
-                }}
-            {% endfor %}
+            {% if include_information %}
+                {% do log("Uploading model information", true) %}
+                {% set model_information = dbt_artifacts.get_relation('model_information') %}
+                {% set content_model_information_array = dbt_artifacts.upload_model_information(results) %}
+                {% for content_query in content_model_information_array %}
+                    {{ dbt_artifacts.insert_into_metadata_table(
+                        database_name=model_information.database,
+                        schema_name=model_information.schema,
+                        table_name=model_information.identifier,
+                        content=content_query
+                        )
+                    }}
+                {% endfor %}
+            {% endif %}
 
         {% endif %}
 

@@ -30,8 +30,8 @@ fct_dbt__test_executions
 1. Add this package to your `packages.yml`:
 ```
 packages:
-  - package:
-    version: 0.1.0
+  - git: "https://github.com/eon-collective/dbt_artifacts_eon.git"
+    revision: 0.1.0
 ```
 
 2. Run `dbt deps` to install the package

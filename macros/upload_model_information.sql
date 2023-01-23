@@ -11,29 +11,32 @@
 {% macro default__get_models_information_dml_sql_array(models) -%}}
     {% if models != [] %}
         {% set information_schema_queries = [] %}
-        {% for model in models -%}
-        {% set query %}
-            select
-                '{{ invocation_id }}',
-                *
-            from {{ model.node.database }}.information_schema.tables
-            where table_schema = upper('{{ model.node.schema }}')
-              and table_name = upper('{{ model.node.alias }}')
-        {% endset %}
-        {% do information_schema_queries.append(query) %}
+
+        {% for object_pair in database_schemas %}
+            {% set tables_in_db_schema = [] %}
+            {% for model in models -%}
+                {% if (model.node.database in object_pair and model.node.schema in object_pair) %}
+                    {% do tables_in_db_schema.append(model.node.alias|upper) %}
+                {% endif %}
+            {% endfor %}
+
+            {% set query %}
+                select
+                    '{{ invocation_id }}',
+                    *
+                from {{ object_pair[0] }}.information_schema.tables
+                where table_schema = '{{ object_pair[1]|upper }}'
+                AND ({% for table_name in tables_in_db_schema %}
+                    table_name = '{{table_name}}' {% if not loop.last %} OR {% endif %}
+                {% endfor %})
+            {% endset %}
+            {% do information_schema_queries.append(query) %}
         {% endfor %}
-        {{ return(information_schema_queries) }}
-    {% else %}
-        {{ return("") }}
-    {% endif %}
+		{{ return(information_schema_queries) }}
+	{% else %}
+	    {{ return("") }}
+	{% endif %}
 {% endmacro %}
-
-
-
-
-
-
-
 
 
 

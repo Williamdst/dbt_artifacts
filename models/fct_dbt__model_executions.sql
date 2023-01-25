@@ -1,3 +1,4 @@
+-- TODO: (MVP) Batch over the last three days showing the status of every invocation_id
 with base as (
 
     select *

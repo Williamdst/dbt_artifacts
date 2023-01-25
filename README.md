@@ -173,3 +173,9 @@ tox -e lint -- models/path/to/directory
 #### Rules
 
 Enforced rules are defined within `tox.ini`. To view the full list of available rules and their configuration, see the [SQLFluff documentation](https://docs.sqlfluff.com/en/stable/rules.html).
+
+
+Tip - Output the mart to a separate schema. I personally use DBT_AUDIT
+Note - The package creates another two sets of tables (the source models and the stage views)
+Note: There is a potential error if the model information query text goes over the 1MB
+Note: How to revert back to the original package

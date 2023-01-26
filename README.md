@@ -9,7 +9,7 @@ The package currently supports
 
 ## Package Outputs
 
-Models included:
+Final Data Mart Models:
 
 ```
 dim_dbt__current_models
@@ -27,7 +27,13 @@ fct_dbt__snapshot_executions
 fct_dbt__test_executions
 ```
 
-<p align='center'> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor-dark.svg"> Full Logical Diagram</a> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor-white.svg">(White Version)</a></p>
+<p align='center'>
+    <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor-dark.svg"> Logical Data Mart Model</a> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor-white.svg">(White Version)</a>
+    <br>
+    <b>Note:</b> The Data Model is a visualization tool to help understand how the output models are related. Within the database, the models <b>DO NOT</b> have "formally" defined constraints on them.
+</p>
+
+
 
 ## Quickstart
 

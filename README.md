@@ -54,7 +54,7 @@ The following configuration can be used to specify where the raw (sources) data 
 ```yml
 models:
   ...
-  dbt_artifacts_eon:
+  dbt_artifacts:
     +database: your_destination_database # optional, default is your target database
     +schema: your_destination_schema # optional, default is your target schema
     staging:
@@ -69,6 +69,19 @@ models:
 Note that model materializations and `on_schema_change` configs are defined in this package's `dbt_project.yml`, so do not set them globally in your `dbt_project.yml` ([see docs on configuring packages](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#configuring-packages)):
 
 > Configurations made in your dbt_project.yml file will override any configurations in a package (either in the dbt_project.yml file of the package, or in config blocks).
+
+### Configurations Inside the Package [(source)](https://github.com/eon-collective/dbt_mart_auditor/blob/main/dbt_project.yml)
+
+```yml
+models:
+  dbt_artifacts:
+    +materialized: view
+    +file_format: delta # Used for Spark configurations
+    sources:
+      +materialized: incremental
+      +on_schema_change: append_new_columns
+      +full_refresh: false
+```
 
 ### Environment Variables
 

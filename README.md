@@ -7,6 +7,8 @@ The package builds a mart of tables and views describing the project it is insta
 The package currently supports
 - Snowflake :white_check_mark:
 
+## Package Outputs
+
 Models included:
 
 ```
@@ -25,7 +27,7 @@ fct_dbt__snapshot_executions
 fct_dbt__test_executions
 ```
 
-<img src="./images/dbt-Mart-Auditor.svg">
+<p align='center'> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor.svg?sanitize=true"> Full Logical Diagram </a> </p>
 
 ## Quickstart
 

@@ -115,7 +115,7 @@ vars:
 ```
 
 ## Acknowledgements
-Thank you to [Tails.com](https://tails.com/gb/careers/) for initial development and maintenance of this package. On 2021/12/20, the repository was transferred from the Tails.com GitHub organization to [Brooklyn Data Co.](https://brooklyndata.co/). On 2022/12/16, the repository was forked from Brooklyn Data Co. to EON Collective.
+Thank you to [Tails.com](https://tails.com/gb/careers/) for initial development and maintenance of this package. On 2021/12/20, the repository was transferred from the Tails.com GitHub organization to [Brooklyn Data Co.](https://brooklyndata.co/). On 2022/12/16, the repository was forked by [EON Collective](https://www.eoncollective.com/).
 
 The macros in the early versions package were adapted from code shared by [Kevin Chan](https://github.com/KevinC-wk) and [Jonathan Talmi](https://github.com/jtalmi) of [Snaptravel](snaptravel.com).
 

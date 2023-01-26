@@ -25,6 +25,8 @@ fct_dbt__snapshot_executions
 fct_dbt__test_executions
 ```
 
+<img src="./images/dbt-Mart-Auditor.svg">
+
 ## Quickstart
 
 1. Add this package to your `packages.yml`:
@@ -70,7 +72,7 @@ Note that model materializations and `on_schema_change` configs are defined in t
 
 > Configurations made in your dbt_project.yml file will override any configurations in a package (either in the dbt_project.yml file of the package, or in config blocks).
 
-### Configurations Inside the Package [(source)](https://github.com/eon-collective/dbt_mart_auditor/blob/main/dbt_project.yml)
+### Configurations Inside the Package [(source)](/dbt_project.yml)
 
 ```yml
 models:

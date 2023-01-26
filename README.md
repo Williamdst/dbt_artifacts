@@ -27,7 +27,7 @@ fct_dbt__snapshot_executions
 fct_dbt__test_executions
 ```
 
-<p align='center'> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor.svg?sanitize=true"> Full Logical Diagram </a> </p>
+<p align='center'> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor-dark.svg"> Full Logical Diagram</a> <a href="https://raw.githubusercontent.com/eon-collective/dbt_mart_auditor/main/images/dbt-Mart-Auditor-white.svg">(White Version)</a></p>
 
 ## Quickstart
 

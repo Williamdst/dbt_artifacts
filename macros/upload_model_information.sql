@@ -23,7 +23,27 @@
             {% set query %}
                 select
                     '{{ invocation_id }}',
-                    *
+                    table_catalog,
+                    table_schema,
+                    table_name,
+                    table_owner,
+                    table_type,
+                    is_transient,
+                    clustering_key,
+                    row_count,
+                    bytes,
+                    retention_time,
+                    self_referencing_column_name,
+                    reference_generation,
+                    user_defined_type_catalog,
+                    user_defined_type_name,
+                    is_insertable_into,
+                    is_typed,
+                    commit_action,
+                    created,
+                    last_altered,
+                    auto_clustering_on,
+                    comment
                 from {{ object_pair[0] }}.information_schema.tables
                 where table_schema = '{{ object_pair[1]|upper }}'
                 AND ({% for table_name in tables_in_db_schema %}

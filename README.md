@@ -1,6 +1,6 @@
 # dbt Artifacts Package (EON Adaptation)
 The package builds a mart of tables and views describing the project it is installed in.
-> ***This package is a modification of the [dbt_artifacts](https://github.com/brooklyn-data/dbt_artifacts) (v2.2.2) package managed by Brooklyn Data Company.***
+> ***This package is a modification of the [dbt_artifacts](https://github.com/brooklyn-data/dbt_artifacts) (v2.2.2) package developed by Brooklyn Data Co.***
 
 ## Supported Data Warehouses
 
@@ -31,19 +31,21 @@ fct_dbt__test_executions
 ```
 packages:
   - git: "https://github.com/eon-collective/dbt_artifacts_eon.git"
-    revision: 0.1.0
+    revision: <latest.release.number>
 ```
 
 2. Run `dbt deps` to install the package
 
-3. Add an on-run-end hook to your `dbt_project.yml`: `on-run-end: "{{ dbt_artifacts.upload_results(results) }}"`
-(We recommend adding a conditional here so that the upload only occurs in your production environment, such as `on-run-end: "{% if target.name == 'prod' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"`)
+3. Add an on-run-end hook to your `dbt_project.yml`: `on-run-end: "{{ dbt_artifacts.upload_results(results) }}"` (We recommend adding a conditional here so that the upload only occurs in your production environment, such as `on-run-end: "{% if target.name == 'prod' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}"`)
 
 4. If you are using [selectors](https://docs.getdbt.com/reference/node-selection/syntax), be sure to include the `dbt_artifacts` models in your dbt invocation step.
 
 5. Run your project!
 
 > :construction_worker: Always run the dbt_artifacts models in every dbt invocation which uses the `upload_results` macro. This ensures that the source models always have the correct fields in case of an update.
+
+> :bulb: To run the package without pulling data from the `INFORMATION_SCHEMA.TABLES` use `dbt_project.yml`: `on-run-end: "{{ dbt_artifacts.upload_results(results, include_information=true) }}"`
+
 
 ## Configuration
 
@@ -62,6 +64,7 @@ models:
       +database: your_sources_database # optional, default is your target database
       +schema: your sources_database # optional, default is your target schema
 ```
+> :bulb: A Recommendation is that the models be outputted to a seperate schema from the target (DBT_AUDIT). Although there are only 13 Facts & Dimensions, the package creates 37 Total Objects.
 
 Note that model materializations and `on_schema_change` configs are defined in this package's `dbt_project.yml`, so do not set them globally in your `dbt_project.yml` ([see docs on configuring packages](https://docs.getdbt.com/docs/building-a-dbt-project/package-management#configuring-packages)):
 
@@ -98,84 +101,15 @@ vars:
   ]
 ```
 
-
 ## Acknowledgements
-Thank you to [Tails.com](https://tails.com/gb/careers/) for initial development and maintenance of this package. On 2021/12/20, the repository was transferred from the Tails.com GitHub organization to Brooklyn Data Co.
+Thank you to [Tails.com](https://tails.com/gb/careers/) for initial development and maintenance of this package. On 2021/12/20, the repository was transferred from the Tails.com GitHub organization to [Brooklyn Data Co.](https://brooklyndata.co/). On 2022/12/16, the repository was forked from Brooklyn Data Co. to EON Collective.
 
 The macros in the early versions package were adapted from code shared by [Kevin Chan](https://github.com/KevinC-wk) and [Jonathan Talmi](https://github.com/jtalmi) of [Snaptravel](snaptravel.com).
 
 Thank you for sharing your work with the community!
 
-## Contributing
+## Why Fork & Not Contribute?
+The original `dbt Artifacts` package is compatible with Databricks, Spark, Snowflake, & BigQuery. To integrate code changes into the repository those changes have to compatible with all four services. Our development efforts are Snowflake specific.
 
-### Running the tests
-
-1. Install pipx
-```bash
-pip install pipx
-pipx ensurepath
-```
-
-2. Install tox
-```bash
-pipx install tox
-```
-
-3. Copy and paste the `integration_test_project/example-env.sh` file and save as `env.sh`. Fill in the missing values.
-
-4. Source the file in your current shell context with the command: `. ./env.sh`.
-
-5. From this directory, run
-
-```
-tox -e integration_snowflake # For the Snowflake tests
-tox -e integration_databricks # For the Databricks tests
-tox -e integration_bigquery # For the BigQuery tests
-```
-
-The Spark tests require installing the [ODBC driver](https://www.databricks.com/spark/odbc-drivers-download). On a Mac, DBT_ENV_SPARK_DRIVER_PATH should be set to `/Library/simba/spark/lib/libsparkodbc_sbu.dylib`. Spark tests have not yet been added to the integration tests.
-
-### SQLFluff
-
-We use SQLFluff to keep SQL style consistent. A GitHub action automatically tests pull requests and adds annotations where there are failures. SQLFluff can also be run locally with `tox`. To install tox, we recommend using `pipx`.
-
-Install pipx:
-```bash
-pip install pipx
-pipx ensurepath
-```
-
-Install tox:
-```bash
-pipx install tox
-```
-
-Lint all models in the /models directory:
-```bash
-tox
-```
-
-Fix all models in the /models directory:
-```bash
-tox -e fix_all
-```
-
-Lint (or subsitute lint to fix) a specific model:
-```bash
-tox -e lint -- models/path/to/model.sql
-```
-
-Lint (or subsitute lint to fix) a specific directory:
-```bash
-tox -e lint -- models/path/to/directory
-```
-
-#### Rules
-
-Enforced rules are defined within `tox.ini`. To view the full list of available rules and their configuration, see the [SQLFluff documentation](https://docs.sqlfluff.com/en/stable/rules.html).
-
-
-Tip - Output the mart to a separate schema. I personally use DBT_AUDIT
 Note - The package creates another two sets of tables (the source models and the stage views)
 Note: There is a potential error if the model information query text goes over the 1MB
-Note: How to revert back to the original package

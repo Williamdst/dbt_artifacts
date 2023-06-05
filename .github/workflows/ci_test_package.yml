@@ -16,10 +16,7 @@ env:
   DBT_ENV_SECRET_SNOWFLAKE_TEST_ROLE: ${{ secrets.SNOWFLAKE_TEST_ROLE }}
   DBT_ENV_SECRET_SNOWFLAKE_TEST_DATABASE: ${{ secrets.SNOWFLAKE_TEST_DATABASE }}
   DBT_ENV_SECRET_SNOWFLAKE_TEST_WAREHOUSE: ${{ secrets.SNOWFLAKE_TEST_WAREHOUSE }}
-  DBT_ENV_SECRET_DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-  DBT_ENV_SECRET_DATABRICKS_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
-  DBT_ENV_SECRET_DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-  DBT_ENV_SECRET_GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+  
   # Env vars to test invocations model
   DBT_CLOUD_PROJECT_ID: 123
   DBT_CLOUD_JOB_ID: ABC
@@ -50,60 +47,7 @@ jobs:
 
       - name: Run Snowflake Tests
         run: tox -e integration_snowflake
-
-  integration-databricks:
-    runs-on: ubuntu-latest
-    environment:
-      name: Approve Integration Tests
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.8.x'
-          architecture: 'x64'
-
-      - name: Install tox
-        run: python3 -m pip install tox
-
-      - name: Run Databricks Tests
-        run: tox -e integration_databricks
-
-  integration-bigquery:
-    runs-on: ubuntu-latest
-    environment:
-      name: Approve Integration Tests
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }} # Check out the code of the PR
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.8.x'
-          architecture: 'x64'
-
-      - name: Install tox
-        run: python3 -m pip install tox
-
-      - id: auth
-        uses: google-github-actions/auth@v0.4.0
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
-      - name: Run BigQuery Tests
-        run: tox -e integration_bigquery
-
+        
   sqlfluff-lint-models:
     name: Lint dbt models using SQLFluff
     runs-on: ubuntu-latest

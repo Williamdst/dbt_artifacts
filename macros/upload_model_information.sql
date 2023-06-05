@@ -33,15 +33,11 @@
                     row_count,
                     bytes,
                     retention_time,
-                    self_referencing_column_name,
-                    reference_generation,
-                    user_defined_type_catalog,
-                    user_defined_type_name,
-                    is_insertable_into,
-                    is_typed,
                     commit_action,
                     created,
                     last_altered,
+                    last_ddl,
+                    last_ddl_by,
                     auto_clustering_on,
                     comment
                 from {{ object_pair[0] }}.information_schema.tables
